@@ -1,15 +1,20 @@
 class Car
 
-  attr_reader(:fuel_level, :speed)
+  attr_reader(:fuel_level, :speed, :engine)
 
-  def initialize(fuel_level, speed)
+  def initialize(fuel_level, speed, engine)
     @fuel_level = fuel_level
     @speed = speed
+    @engine = engine
   end
 
   def accelerate
-    @fuel_level -= 5
-    @speed += 10
+    if @fuel_level >= -@engine.fuel_step
+      @fuel_level += @engine.fuel_step
+      @speed += @engine.speed_step
+    else
+      return "Out of fuel!"
+    end
   end
 
   def brake
@@ -18,6 +23,13 @@ class Car
     else
       @speed = 0
     end
+  end
+
+  def maximum_speed
+    while @fuel_level > 0
+      accelerate
+    end
+    return @speed
   end
 
 end
